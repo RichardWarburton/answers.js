@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('myApp.controllers', []).
+angular.module('answers.controllers', []).
   controller('MyCtrl1', [function() {
 
   }])
