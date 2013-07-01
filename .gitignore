@@ -1,2 +1,5 @@
 logs/*
 !.gitkeep
+
+# vim
+*.swp
