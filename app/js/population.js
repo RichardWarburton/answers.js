@@ -1,19 +1,14 @@
 'use strict';
 
 angular
-    .module('answers.', [])
+    .module('answers', [])
     .factory('population', function() {
         return function() {
             var population = {
+                data: [],
                 mean: function() {
                     return 0;
                 },
-                median: function() {
-                    return 0;
-                },
-                mode: function() {
-                    return 0;
-                }
             };
 
             return population;
