@@ -4,7 +4,7 @@ describe('Population of [1,2,3]', function() {
     
     var population;
 
-    beforeEach(module('answers'));
+    beforeEach(module('answers.population'));
     
     beforeEach(inject(function(Population) {
         population = new Population([1,2,3]);

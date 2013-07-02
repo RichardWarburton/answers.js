@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('answers', [])
+    .module('answers.population', [])
     .factory('Population', function() {
         return function(mbData) {
             

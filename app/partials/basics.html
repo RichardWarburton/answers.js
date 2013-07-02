@@ -3,5 +3,18 @@
 
 <p>Paste your data.</p>
 
-<ng-include src="'partials/data.html'" />
+<div ng-include src="'partials/data.html'" ></div>
+
+<table class="table table-hover">
+    <tbody>
+        <tr>
+            <th>sum</th>
+            <td ng-bind="compute('sum')"></td>
+        </tr>
+        <tr>
+            <th>mean</th>
+            <td ng-bind="compute('mean')"></td>
+        </tr>
+    </tbody>
+</table>
 
