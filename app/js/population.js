@@ -2,16 +2,15 @@
 
 angular
     .module('answers', [])
-    .factory('population', function() {
+    .factory('Population', function() {
         return function() {
-            var population = {
-                data: [],
-                mean: function() {
-                    return 0;
-                },
+            this.data = [];
+            this.mean = function() {
+                var sum = _.reduce(this.data, function(acc, val) {
+                    return acc + val;
+                }, 0);
+                return sum / this.data.length;
             };
-
-            return population;
         };
     });
 
