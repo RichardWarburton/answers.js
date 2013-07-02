@@ -5,6 +5,7 @@ files = [
   JASMINE_ADAPTER,
   'app/lib/angular/angular.js',
   'app/lib/angular/angular-*.js',
+  'app/lib/angular/ui-bootstrap-tpls-0.4.0.js',
   'app/lib/*.js',
   'test/lib/angular/angular-mocks.js',
   'app/js/**/*.js',
@@ -13,7 +14,7 @@ files = [
 
 autoWatch = true;
 
-browsers = ['Chrome'];
+browsers = ['PhantomJS'];
 
 junitReporter = {
   outputFile: 'test_out/unit.xml',

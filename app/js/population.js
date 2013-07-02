@@ -3,14 +3,24 @@
 angular
     .module('answers', [])
     .factory('Population', function() {
-        return function() {
-            this.data = [];
-            this.mean = function() {
-                var sum = _.reduce(this.data, function(acc, val) {
+        return function(mbData) {
+            
+            this.data = mbData || [];
+
+            this.sum = function() {
+                return _.reduce(this.data, function(acc, val) {
                     return acc + val;
                 }, 0);
-                return sum / this.data.length;
             };
+
+            this.mean = function() {
+                return this.sum() / this.data.length;
+            };
+
+            this.isPopulation = function() {
+                return _.every(this.data, _.isNumber);
+            };
+
         };
     });
 
