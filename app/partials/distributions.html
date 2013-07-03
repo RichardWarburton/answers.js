@@ -9,10 +9,32 @@
 
 <p>
     The {{ distribution.name }} Distribution is defined by the parameters
-    {{ distribution.parameters }}.  We've rendered it here with values
-    {{ distribution.demo.parameters }} for the range {{ distribution.demo.range }}.
+    {{ distribution.parameters }}.  We've rendered it here for you
+    for the range {{ distribution.demo.range }}.
     see <a href="{{distribution.link}}">here</a> for more information.
 </p>
+
+<h3>Parameters</h3>
+<form class="form-horizontal">
+  <div class="control-group" ng-repeat="parameter in distribution.parameters">
+    <label class="control-label">{{parameter}}</label>
+    <div class="controls">
+      <input type="text" ng-model="demo.parameters[$index]">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label">Start</label>
+    <div class="controls">
+      <input type="text" ng-model="demo.start">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label">Stop</label>
+    <div class="controls">
+      <input type="text" ng-model="demo.stop">
+    </div>
+  </div>
+</form>
 
 <div line-chart class="big-chart" data="values"></div>
 

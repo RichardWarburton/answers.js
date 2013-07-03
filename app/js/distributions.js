@@ -17,7 +17,8 @@ angular
         },
         demo: {
             parameters: [0, Math.sqrt(0.5)],
-            range: [-5, 5]
+            start: -5,
+            stop: 5
         }
     }).value('exponentialDistribution', {
         name: 'Exponential',
@@ -30,7 +31,8 @@ angular
         },
         demo: {
             parameters: [1],
-            range: [0, 5]
+            start: 0,
+            stop: 5
         }
     }).factory('distributions',
         ['normalDistribution', 'exponentialDistribution',
@@ -45,11 +47,9 @@ angular
         };
     }).factory('generateDemo', ['generate', function(generate) {
         var STEP = 0.1;
-        return function(distribution) {
-            var parameters = distribution.demo.parameters;
+        return function(distribution, parameters, start, stop) {
             var pdf = distribution.pdf.apply(this, parameters);
-            var range = distribution.demo.range;
-            return generate(pdf, range[0], range[1], STEP);
+            return generate(pdf, start, stop, STEP);
         };
     }]).factory('histogram', function() {
         return function(values, bins) {

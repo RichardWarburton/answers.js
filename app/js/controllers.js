@@ -21,9 +21,26 @@ angular
             $scope.distributions = distributions;
             $scope.distribution = distributions[0];
             $scope.cell = "";
+            
             $scope.$watch('distribution', function(distribution) {
                 if (distribution) {
-                    $scope.values = generateDemo(distribution);
+                    $scope.demo = distribution.demo;
+                    
+                    var update = function() {
+                        var parameters = $scope.demo.parameters;
+                        var start = parseInt($scope.demo.start);
+                        var stop = parseInt($scope.demo.stop);
+                        if (_.isNaN(start) || _.isNaN(stop))
+                            return;
+
+                        $scope.values = generateDemo(distribution, parameters, start, stop);
+                    }
+
+                    for (var i in $scope.demo.parameters) {
+                        $scope.$watch('demo.parameters['+i+']', update);
+                    }
+                    $scope.$watch('demo.start', update);
+                    $scope.$watch('demo.stop', update);
                 }
             });
         }]);
