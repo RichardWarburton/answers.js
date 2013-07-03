@@ -1,13 +1,5 @@
 'use strict';
 
-
-/**
- * All distributions have a:
- * name
- * link - to a description
- * parameters
- * pdf - the probability density function
- */
 angular
     .module('answers.distributions', [])
     .value('normalDistribution', {
@@ -27,9 +19,23 @@ angular
             parameters: [0, Math.sqrt(0.5)],
             range: [-5, 5]
         }
+    }).value('exponentialDistribution', {
+        name: 'Exponential',
+        link: 'http://en.wikipedia.org/wiki/Exponential_distribution',
+        parameters: ['Lambda'],
+        pdf: function(lambda) {
+            return function(x) {
+                return lambda * Math.exp(-1 * lambda * x);
+            };
+        },
+        demo: {
+            parameters: [1],
+            range: [0, 5]
+        }
     }).factory('distributions',
-        ['normalDistribution', function(normalDistribution) {
-            return [normalDistribution];
+        ['normalDistribution', 'exponentialDistribution',
+        function(normalDistribution, exponentialDistribution) {
+            return [normalDistribution, exponentialDistribution];
         }]
     ).factory('generate', function() {
         return function(pdf, start, stop, step) {
@@ -45,5 +51,21 @@ angular
             var range = distribution.demo.range;
             return generate(pdf, range[0], range[1], STEP);
         };
-    }]);
+    }]).factory('histogram', function() {
+        return function(values, bins) {
+            var histo = new Array(bins);
+            var min = _.min(values), max = _.max(values);
+            var width = Math.ceil((max - min) / bins);
+            _.each(values, function(value) {
+                var index = ((value - min) / width).toFixed();
+                var bin = histo[index];
+                if (bin === undefined) {
+                    bin = [min + (index * width), 0];
+                    histo[index] = bin;
+                }
+                bin[1]++;
+            });
+            return histo;
+        };
+    });
 

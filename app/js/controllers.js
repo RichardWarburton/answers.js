@@ -16,10 +16,10 @@ angular
             };
         }])
     .controller('DistributionsController',
-        ['$scope', 'normalDistribution', 'generateDemo',
-        function($scope, normalDistribution, generateDemo) {
-            $scope.distribution = normalDistribution;
+        ['$scope', 'distributions', 'generateDemo',
+        function($scope, distributions, generateDemo) {
+            $scope.distribution = distributions[1];
             $scope.cell = "";
-            $scope.values = generateDemo(normalDistribution);
+            $scope.values = generateDemo($scope.distribution);
         }]);
 
