@@ -1,9 +1,23 @@
 
 <h1>distributions</h1>
 
+<select
+    ng-model="distribution"
+    ng-options="dist.name for dist in distributions"
+    ng-required>
+</select>
+
+<p>
+    The {{ distribution.name }} Distribution is defined by the parameters
+    {{ distribution.parameters }}.  We've rendered it here with values
+    {{ distribution.demo.parameters }} for the range {{ distribution.demo.range }}.
+    see <a href="{{distribution.link}}">here</a> for more information.
+</p>
+
 <div line-chart class="big-chart" data="values"></div>
 
 <!--
 <p>Paste your data to figure out what the distribution is:</p>
 <div ng-include src="'partials/data.html'" />
 -->
+

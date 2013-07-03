@@ -16,9 +16,17 @@ angular
                     data: '='
                 },
                 link: function(scope, element, attrs) {
-                    $.plot($(element), [{
+                    var plot = $.plot($(element), [{
                         data: scope.data
                     }]);
+
+                    scope.$watch('data', function(newValue) {
+                        plot.setData([{
+                            data: newValue
+                        }]);
+                        plot.setupGrid();
+                        plot.draw();
+                    });
                 }
             };
         });

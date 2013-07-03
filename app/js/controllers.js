@@ -18,8 +18,13 @@ angular
     .controller('DistributionsController',
         ['$scope', 'distributions', 'generateDemo',
         function($scope, distributions, generateDemo) {
-            $scope.distribution = distributions[1];
+            $scope.distributions = distributions;
+            $scope.distribution = distributions[0];
             $scope.cell = "";
-            $scope.values = generateDemo($scope.distribution);
+            $scope.$watch('distribution', function(distribution) {
+                if (distribution) {
+                    $scope.values = generateDemo(distribution);
+                }
+            });
         }]);
 
