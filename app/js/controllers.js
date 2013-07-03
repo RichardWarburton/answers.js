@@ -1,9 +1,7 @@
 'use strict';
 
-/* Controllers */
-
 angular
-    .module('answers.controllers', ['answers.population'])
+    .module('answers.controllers', ['answers.population', 'answers.distributions'])
     .controller('BasicsController',
         ['$scope', '$parse', 'Population', 
         function($scope, $parse, Population) {
@@ -16,5 +14,12 @@ angular
                 var population = new Population(data);
                 return population[field]();
             };
+        }])
+    .controller('DistributionsController',
+        ['$scope', 'normalDistribution', 'generateDemo',
+        function($scope, normalDistribution, generateDemo) {
+            $scope.distribution = normalDistribution;
+            $scope.cell = "";
+            $scope.values = generateDemo(normalDistribution);
         }]);
 
