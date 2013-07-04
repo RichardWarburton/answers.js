@@ -21,9 +21,17 @@ angular
             $scope.distributions = distributions;
             $scope.distribution = distributions[0];
             $scope.cell = "";
+
+            var oldWatches = [];
             
             $scope.$watch('distribution', function(distribution) {
                 if (distribution) {
+                    // Unregister
+                    _.each(oldWatches, function(removeWatch) {
+                        removeWatch();
+                    });
+                    oldWatches = [];
+
                     $scope.demo = distribution.demo;
                     
                     var update = function() {
@@ -37,10 +45,10 @@ angular
                     }
 
                     for (var i in $scope.demo.parameters) {
-                        $scope.$watch('demo.parameters['+i+']', update);
+                        oldWatches.push($scope.$watch('demo.parameters['+i+']', update));
                     }
-                    $scope.$watch('demo.start', update);
-                    $scope.$watch('demo.stop', update);
+                    oldWatches.push($scope.$watch('demo.start', update));
+                    oldWatches.push($scope.$watch('demo.stop', update));
                 }
             });
         }]);
