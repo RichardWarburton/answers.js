@@ -34,10 +34,25 @@ angular
             start: 0,
             stop: 5
         }
+    }).value('uniformDistribution', {
+        name: 'Uniform',
+        link: 'http://en.wikipedia.org/wiki/Uniform_distribution_%28continuous%29',
+        parameters: [],
+        pdf: function(start, stop) {
+            var VALUE = 1 / (stop - start);
+            return function(x) {
+                return VALUE;
+            };
+        },
+        demo: {
+            parameters: [],
+            start: 1,
+            stop: 5
+        }
     }).factory('distributions',
-        ['normalDistribution', 'exponentialDistribution',
-        function(normalDistribution, exponentialDistribution) {
-            return [normalDistribution, exponentialDistribution];
+        ['normalDistribution', 'exponentialDistribution', 'uniformDistribution',
+        function(normalDistribution, exponentialDistribution, uniformDistribution) {
+            return [normalDistribution, exponentialDistribution, uniformDistribution];
         }]
     ).factory('generate', function() {
         return function(pdf, start, stop, step) {
@@ -48,6 +63,8 @@ angular
     }).factory('generateDemo', ['generate', function(generate) {
         var STEP = 0.1;
         return function(distribution, parameters, start, stop) {
+            parameters.push(start);
+            parameters.push(stop);
             var pdf = distribution.pdf.apply(this, parameters);
             return generate(pdf, start, stop, STEP);
         };
