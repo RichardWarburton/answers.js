@@ -16,39 +16,50 @@ angular
             };
         }])
     .controller('DistributionsController',
-        ['$scope', 'distributions', 'generateDemo',
-        function($scope, distributions, generateDemo) {
+        ['$scope', '$parse', 'distributions', 'generateDemo', 'genHisto',
+        function($scope, $parse, distributions, generateDemo, genHisto) {
             $scope.distributions = distributions;
             $scope.distribution = distributions[0];
             $scope.cell = "";
+            $scope.userData = [];
 
             var oldWatches = [];
             
             $scope.$watch('distribution', function(distribution) {
-                if (distribution) {
-                    // Unregister
-                    _.each(oldWatches, function(removeWatch) {
-                        removeWatch();
-                    });
-                    oldWatches = [];
+                if (!distribution)
+                    return;
 
-                    $scope.demo = distribution.demo;
-                    
-                    var update = function() {
-                        var parameters = $scope.demo.parameters;
-                        var start = parseInt($scope.demo.start);
-                        var stop = parseInt($scope.demo.stop);
-                        if (_.isNaN(start) || _.isNaN(stop))
-                            return;
+                // Unregister
+                _.each(oldWatches, function(removeWatch) {
+                    removeWatch();
+                });
+                oldWatches = [];
 
-                        $scope.values = generateDemo(distribution, parameters, start, stop);
-                    }
+                $scope.demo = distribution.demo;
+                
+                var update = function() {
+                    var parameters = $scope.demo.parameters;
+                    var start = parseInt($scope.demo.start);
+                    var stop = parseInt($scope.demo.stop);
+                    if (_.isNaN(start) || _.isNaN(stop))
+                        return;
 
-                    for (var i in $scope.demo.parameters) {
-                        oldWatches.push($scope.$watch('demo.parameters['+i+']', update));
-                    }
-                    oldWatches.push($scope.$watch('demo.start', update));
-                    oldWatches.push($scope.$watch('demo.stop', update));
+                    $scope.values = generateDemo(distribution, parameters, start, stop);
+                }
+
+                for (var i in $scope.demo.parameters) {
+                    oldWatches.push($scope.$watch('demo.parameters['+i+']', update));
+                }
+                oldWatches.push($scope.$watch('demo.start', update));
+                oldWatches.push($scope.$watch('demo.stop', update));
+            });
+
+            $scope.$watch('cell', function() {
+                try {
+                    var rawData = $parse($scope.cell)($scope);
+                    $scope.userData = genHisto(rawData);
+                } catch (e) {
+                    // deliberately ignore parse exceptions
                 }
             });
         }]);

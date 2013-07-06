@@ -84,5 +84,15 @@ angular
             });
             return histo;
         };
-    });
+    }).factory('binEstimate', function() {
+        return function(values) {
+            var n = values.length;
+            return Math.round(Math.sqrt(n));
+        };
+    }).factory('genHisto', ['binEstimate', 'histogram', function(binEstimate, histogram) {
+        return function(values) {
+            var bins = binEstimate(values);
+            return histogram(values, bins);
+        };
+    }]);
 

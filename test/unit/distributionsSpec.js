@@ -14,6 +14,13 @@ describe('Distributions', function() {
             expect(result).toEqual([[1,3], [2,2], [3,1]]);
         }));
     });
+    
+    describe('binEstimate', function() {
+        it('example works', inject(function(binEstimate) {
+            var result = binEstimate([1,1,1,2,2,3,3,3]);
+            expect(result).toEqual(3);
+        }));
+    });
 
 });
 

@@ -7,8 +7,10 @@ angular
           elm.text(version);
         };
     }])
-    .directive('lineChart',
-        function() {
+    .factory('chart', function() {
+        // Generic chart, to be customised by children
+        return function(options) {
+            options = options || {};
             // Can't be an element - flot/angular issue
             return {
                 restrict: 'A',
@@ -16,9 +18,8 @@ angular
                     data: '='
                 },
                 link: function(scope, element, attrs) {
-                    var plot = $.plot($(element), [{
-                        data: scope.data
-                    }]);
+                    var data = [{ data: scope.data }];
+                    var plot = $.plot($(element), data, options);
 
                     scope.$watch('data', function(newValue) {
                         plot.setData([{
@@ -28,6 +29,19 @@ angular
                         plot.draw();
                     });
                 }
-            };
+            }
+        };
+    }).directive('lineChart', ['chart', function(chart) {
+        return chart();
+    }]).directive('barChart', ['chart', function(chart) {
+        return chart({
+            series: {
+                bars: {
+                    show: true,
+                    align: "center",
+                    barWidth: 0.75,
+                }
+            }
         });
+    }]);
 
