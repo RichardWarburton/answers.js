@@ -62,5 +62,10 @@ angular
                     // deliberately ignore parse exceptions
                 }
             });
-        }]);
+        }])
+    .controller('ClusteringController',
+        ['$scope', function($scope) {
+
+        }])
+    ;
 

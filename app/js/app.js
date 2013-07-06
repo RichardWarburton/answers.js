@@ -4,7 +4,8 @@
 angular
     .module('answers',
         ['ui.bootstrap', 'answers.filters', 'answers.services', 
-         'answers.directives', 'answers.controllers', 'answers.population'])
+         'answers.directives', 'answers.controllers', 'answers.population',
+         'answers.clustering'])
 
     .config(['$routeProvider', function($routeProvider, Population) {
         $routeProvider.when('/home', {
@@ -18,6 +19,10 @@ angular
         $routeProvider.when('/distributions', {
             templateUrl: 'partials/distributions.html', 
             controller: 'DistributionsController'
+        });
+        $routeProvider.when('/clustering', {
+            templateUrl: 'partials/clustering.html', 
+            controller: 'ClusteringController'
         });
         $routeProvider.otherwise({redirectTo: '/home'});
   }]);
