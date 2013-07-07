@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('answers.clustering')
+    .module('answers.clustering', [])
     .factory('Vector', function() {
         function sum(data) {
             return _.reduce(data, function(acc, val) {
@@ -9,7 +9,7 @@ angular
             }, 0);
         }
         function plus(left, right) {
-            return new Vector(_.zip(left, right)
+            return new Vector(_.zip(left.data, right.data)
                                .map(function(x) {
                                    return x[0] + x[1];
                                }));
@@ -17,20 +17,26 @@ angular
 
         var Vector = function(data) {
             this.data = data || [];
-            this.equals(other) = function() {
-                return this.data === other.data;
+            this.equals = function(other) {
+                return _.zip(this.data, other.data)
+                        .map(function(x) {
+                            return x[0] === x[1];
+                        })
+                        .reduce(function(acc, val) {
+                            return acc && val;
+                        });
             };
             this.divScalar = function(scale) {
-                this.data = _.map(this.data, function(x) {
+                return new Vector(_.map(this.data, function(x) {
                     return x / scale;
-                });
+                }));
             }
         };
 
         Vector.distance = function(p, q) {
-            var sums = sum(_.zip(p,q)
+            var sums = sum(_.zip(p.data,q.data)
                             .map(function(x) {
-                                return Math.pow(x[0] - y[1], 2);
+                                return Math.pow(x[0] - x[1], 2);
                             }));
 
             return Math.sqrt(sums);
@@ -39,7 +45,9 @@ angular
         Vector.mean = function(vectors) {
             var count = vectors.length;
             var n = vectors[0].data.length;
-            var tally = _.reduce(vectors, plus, new Vector(new Array(n)));
+            var initial = new Vector(new Array(n));
+            _.times(n, function(x) { initial.data[x] = 0; });
+            var tally = _.reduce(vectors, plus, initial);
             return tally.divScalar(count);
         };
 
