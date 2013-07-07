@@ -49,10 +49,49 @@ angular
             start: 1,
             stop: 5
         }
+    }).value('betaDistribution', {
+        name: 'Beta',
+        link: 'http://en.wikipedia.org/wiki/Beta_distribution',
+        parameters: ['alpha', 'beta'],
+        pdf: function(alpha, beta) {
+            alpha = parseFloat(alpha);
+            beta = parseFloat(beta);
+
+            // Implementation of the Beta function
+            // http://en.wikipedia.org/wiki/Beta_function
+            function betaFunc(x,y) {
+                var result = numeric.dopri(0.0, 1.0, 0.0, function(t) {
+                                return Math.pow(t, x - 1.0) * Math.pow(1.0 - t, y - 1.0);
+                            }).at(1);
+
+                //  if integration fails resort to approximation
+                if(_.isNaN(result)) {
+                    // Stirlings approximation of beta function
+                    // en.wikipedia.org/wiki/Beta_function#Approximation
+                    var sqrt2pi = Math.sqrt(2.0 * Math.PI);
+                    var numerator = Math.pow(x, x - 0.5) * Math.pow(y, y - 0.5);
+                    var denom = Math.pow(x + y, x + y - 0.5);
+                    result = sqrt2pi * numerator / denom;                    
+                }
+
+                return result;
+            } 
+
+            var betaValue = betaFunc(alpha, beta);
+
+            return function(x) {
+                return Math.pow(x, alpha -1.0) * Math.pow(1.0 - x,beta - 1.0) / betaValue;
+            };
+        },
+        demo: {
+            parameters: [2, 5],
+            start: 0,
+            stop: 1
+        }
     }).factory('distributions',
-        ['normalDistribution', 'exponentialDistribution', 'uniformDistribution',
-        function(normalDistribution, exponentialDistribution, uniformDistribution) {
-            return [normalDistribution, exponentialDistribution, uniformDistribution];
+        ['normalDistribution', 'exponentialDistribution', 'uniformDistribution', 'betaDistribution',
+        function(normalDistribution, exponentialDistribution, uniformDistribution, betaDistribution) {
+            return [normalDistribution, exponentialDistribution, uniformDistribution, betaDistribution];
         }]
     ).factory('generate', function() {
         return function(pdf, start, stop, step) {
@@ -61,12 +100,13 @@ angular
             return _.zip(xs, ys);
         };
     }).factory('generateDemo', ['generate', function(generate) {
-        var STEP = 0.1;
+    	var NUM_POINTS = 500;
         return function(distribution, parameters, start, stop) {
+        	var step = (stop-start) / NUM_POINTS;
             parameters.push(start);
             parameters.push(stop);
             var pdf = distribution.pdf.apply(this, parameters);
-            return generate(pdf, start, stop, STEP);
+            return generate(pdf, start, stop, step);
         };
     }]).factory('histogram', function() {
         return function(values, bins) {
